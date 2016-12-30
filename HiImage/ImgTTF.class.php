@@ -3,46 +3,58 @@
  * User: JearyVon
  * Date: 2016/3/19 0019
  * Time: 16:52
- * Email£ºv@vvwall.com
+ * Emailï¼šv@vvwall.com
  */
 class ImgTTF
 {
 		private $config =array();
-		
-		public function __construct($config=false){
-			if($config){
-				$this->config =$config;
-			}else{
-			 $this->config =array(
-				'width' =>'800',
-				'height'=>'220',
-				'border' =>false,
-				'randcolor'=>true,
-				'padding' =>20,
-				'bd'=>array(
-					'r' =>0,
-					'g' =>0,
-					'b' =>0,
-				),
-				'background'=>array(
-					'r' =>255,
-					'g' =>250,
-					'b' =>249,
-				),
-				'r' =>80,
-				'g' =>97,
-				'b' =>109,
-				'fontpath'=>"msyh.ttf",
-				'fontsize'=>16,
-
-			)	;
+		private function mbStrSplit ($string, $len=1) {
+			$start = 0;
+			$strlen = mb_strlen($string);
+			while ($strlen) {
+				$array[] = mb_substr($string,$start,$len,"utf8");
+				$string = mb_substr($string, $len, $strlen,"utf8");
+				$strlen = mb_strlen($string);
 			}
+			return $array;
+		}
+		public function __construct($config=false){
+         $defaultConfig =array(
+            'width' =>'800',
+            'height'=>'220',
+            'border' =>false,
+            'randcolor'=>true,
+            'padding' =>20,
+            'bd'=>array(
+                'r' =>0,
+                'g' =>0,
+                'b' =>0,
+            ),
+            'background'=>array(
+                'r' =>255,
+                'g' =>250,
+                'b' =>249,
+            ),
+            'r' =>80,
+            'g' =>97,
+            'b' =>109,
+            'fontpath'=>"msyh.ttf",
+            'fontsize'=>16,
+
+        );
+        if($config){
+            $this->config =array_merge($defaultConfig,$config);
+        }else{
+            $this->config =$defaultConfig;
+        }
 
 		}
         public function  getstrpic($str,$config=null,$strarr=null){
             if($config==null){
                $config=$this->config;
-            }
+            }else{
+				 $config =array_merge($this->config,$config);
+			}
             if(mb_strlen($str,'UTF-8')>140){
                 return false;
             }
@@ -55,7 +67,7 @@ class ImgTTF
             $imgpicstr =array();
             $break =false;
             if(!isset($strarr)){
-                $strarr =mbStrSplit($str);
+                $strarr =$this->mbStrSplit($str);
             }
             $fontH= $fontsize*1.5;
             $centy =$fontH+$padding;
@@ -74,8 +86,8 @@ class ImgTTF
                         $centx =$padding;
                         $td['str']=$tempstr;
                         $td['y'] =$centy;
-                        array_push($imgpicstr,$td );//¼ÓÈëÊı×é
-                        $tempstr ='';//Çå¿Õ
+                        array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
+                        $tempstr ='';//æ¸…ç©º
                         $centy +=$fontH;
                     }
                     $tempstr.=$strarr[$i];
@@ -83,7 +95,7 @@ class ImgTTF
             }
             $td['str']=$tempstr;
             $td['y'] =$centy;
-            array_push($imgpicstr, $td);//¼ÓÈëÊı×é
+            array_push($imgpicstr, $td);//åŠ å…¥æ•°ç»„
 
             if(!$break){
                 if($config['randcolor']){
@@ -92,24 +104,24 @@ class ImgTTF
                     $config['b']=mt_rand(1,255);
                     $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);
                 }
-                //Ãè±ß
+                //æè¾¹
                 if($config['border']){
-                    $bg= imagecolorallocatealpha($im,$config['bd']['r'],$config['bd']['g'],$config['bd']['b'],127);//±³¾°É«µÚËÄ¸ö²ÎÊı0-127±íÊ¾Í¸Ã÷¶È
-                    $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//×ÖÌåÑÕÉ«Ñ¡Ôñ
+                    $bg= imagecolorallocatealpha($im,$config['bd']['r'],$config['bd']['g'],$config['bd']['b'],127);//èƒŒæ™¯è‰²ç¬¬å››ä¸ªå‚æ•°0-127è¡¨ç¤ºé€æ˜åº¦
+                    $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//å­—ä½“é¢œè‰²é€‰æ‹©
                 }else{
-                    $bg= imagecolorallocatealpha($im,$config['r'],$config['g'],$config['b'],127);//±³¾°É«µÚËÄ¸ö²ÎÊı0-127±íÊ¾Í¸Ã÷¶È
-                    $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//×ÖÌåÑÕÉ«Ñ¡Ôñ
+                    $bg= imagecolorallocatealpha($im,$config['r'],$config['g'],$config['b'],127);//èƒŒæ™¯è‰²ç¬¬å››ä¸ªå‚æ•°0-127è¡¨ç¤ºé€æ˜åº¦
+                    $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//å­—ä½“é¢œè‰²é€‰æ‹©
                 }
 
-                imagealphablending($im , false);//¹Ø±Õ»ìºÏÄ£Ê½£¬ÒÔ±ãÍ¸Ã÷ÑÕÉ«ÄÜ¸²¸ÇÔ­»­°å
-                imagefill($im , 0 , 0 , $bg);//Ìî³ä
-                //ÖÇÄÜ¼ÆËãÎÄ×Ö´óĞ¡»¹ÓĞÅÅ°æ
+                imagealphablending($im , false);//å…³é—­æ··åˆæ¨¡å¼ï¼Œä»¥ä¾¿é€æ˜é¢œè‰²èƒ½è¦†ç›–åŸç”»æ¿
+                imagefill($im , 0 , 0 , $bg);//å¡«å……
+                //æ™ºèƒ½è®¡ç®—æ–‡å­—å¤§å°è¿˜æœ‰æ’ç‰ˆ
 
 
                 $paddingtb=($height -end($imgpicstr)['y'])/2;
                 $centx = $padding;
                 if(count($imgpicstr)==1){
-                    //¾ÓÖĞ
+                    //å±…ä¸­
                     $bbox = imageftbbox($fontsize, 0, $font, $imgpicstr[0]['str']);
                    $centx= ($width-($bbox[2]-$bbox[0]))/2+$padding;
                 }
@@ -117,34 +129,34 @@ class ImgTTF
 
                     imagettftext($im, $fontsize, 0, $centx, $imgpicstr[$t]['y']+$paddingtb, $color, $font, $imgpicstr[$t]['str']);
                 }
-                imagesavealpha($im , true);//ÉèÖÃ±£´æPNGÊ±±£ÁôÍ¸Ã÷Í¨µÀĞÅÏ¢
+                imagesavealpha($im , true);//è®¾ç½®ä¿å­˜PNGæ—¶ä¿ç•™é€æ˜é€šé“ä¿¡æ¯
                 header("content-type: image/png");
                 imagepng($im);
 
             }else{
 
-               $this->getstrpic($str,$config,$strarr);//µİ¹é
+               $this->getstrpic($str,$config,$strarr);//é€’å½’
             }
             imagedestroy($im);
             return ture;
         }
-    //È¡Ò»ĞĞÎÄ×ÖÍ¼
+    //å–ä¸€è¡Œæ–‡å­—å›¾
     public function getline(){
 
     }
     public function  getpagepic($str,$eng=1,$config=null){
-        //xÏÈ²»Éú²úÍ¼Æ¬
-        // Ö»¸ø¶¨Ò»¸ö¿í¶È880px
+        //xå…ˆä¸ç”Ÿäº§å›¾ç‰‡
+        // åªç»™å®šä¸€ä¸ªå®½åº¦880px
         if(!isset($config)){
             $config =$this->config;
-            $config['width']=800;
+            $config['width']=600;
         }
         $width =$config['width'];
 
-                //´¦Àí×Ö·û´®
+                //å¤„ç†å­—ç¬¦ä¸²
         $str=str_replace(PHP_EOL,'?',$str);
 
-        $strarr =mbStrSplit($str);//    ²ğ×Ö
+        $strarr =$this->mbStrSplit($str);//    æ‹†å­—
         $fontH =$config['fontsize']*1.5;
         $centy =$fontH+$config['padding'];
         $fontsize =$config['fontsize'];
@@ -160,8 +172,8 @@ class ImgTTF
                     $centx =$padding;
                     $td['str']=$tempstr;
                     $td['y'] =$centy;
-                    array_push($imgpicstr,$td );//¼ÓÈëÊı×é
-                    $tempstr ='';//Çå¿Õ
+                    array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
+                    $tempstr ='';//æ¸…ç©º
                     $centy +=$fontH;
                     $linewidth=0;
                 }else{
@@ -171,8 +183,8 @@ class ImgTTF
                         $centx =$padding;
                         $td['str']=$tempstr;
                         $td['y'] =$centy;
-                        array_push($imgpicstr,$td );//¼ÓÈëÊı×é
-                        $tempstr ='';//Çå¿Õ
+                        array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
+                        $tempstr ='';//æ¸…ç©º
                         $centy +=$fontH;
                         $linewidth=0;
                     }
@@ -187,8 +199,8 @@ class ImgTTF
                     $centx =$padding;
                     $td['str']=$tempstr;
                     $td['y'] =$centy;
-                    array_push($imgpicstr,$td );//¼ÓÈëÊı×é
-                    $tempstr ='';//Çå¿Õ
+                    array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
+                    $tempstr ='';//æ¸…ç©º
                     $centy +=$fontH;
                 }else{
                     $pos =imageftbbox($fontsize*1.05, 0, $font, $tempstr);
@@ -197,8 +209,8 @@ class ImgTTF
                         $centx =$padding;
                         $td['str']=$tempstr;
                         $td['y'] =$centy;
-                        array_push($imgpicstr,$td );//¼ÓÈëÊı×é
-                        $tempstr ='';//Çå¿Õ
+                        array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
+                        $tempstr ='';//æ¸…ç©º
                         $centy +=$fontH;
                     }
                     $tempstr.=$strarr[$i];
@@ -208,43 +220,43 @@ class ImgTTF
         }
         $td['str']=$tempstr;
         $td['y'] =$centy;
-        array_push($imgpicstr,$td );//¼ÓÈëÊı×é
+        array_push($imgpicstr,$td );//åŠ å…¥æ•°ç»„
 //     dump($imgpicstr);
         $autoheight =end($imgpicstr)['y']+10+$padding*2;
         $im =imagecreate($width,$autoheight);
         $centx = $padding;
         if(count($imgpicstr)==1){
-            //¾ÓÖĞ
+            //å±…ä¸­
             $bbox = imageftbbox($fontsize, 0, $font, $imgpicstr[0]['str']);
             $centx= ($width-($bbox[2]-$bbox[0]))/2+$padding;
         }
         $background = imagecolorallocate($im, $config['background']['r'],$config['background']['g'],$config['background']['b']);
-        $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//×ÖÌåÑÕÉ«Ñ¡Ôñ
+        $color = imagecolorallocate($im, $config['r'],$config['g'],$config['b']);//å­—ä½“é¢œè‰²é€‰æ‹©
       //  imageline($im,$padding,$padding,$width-$padding,$padding,$color);
         for($t =0;$t<count($imgpicstr);$t++) {
            // var_dump($imgpicstr[$t]);
             imagettftext($im, $fontsize, 0, $centx, $imgpicstr[$t]['y'], $color, $font, $imgpicstr[$t]['str']);
         }
-        //¼ÓÒ³½Å»­Ïß
+        //åŠ é¡µè„šç”»çº¿
         $linecolor =imagecolorallocate($im, 240,0,86);
       //  imageline($im,$padding,$autoheight-26,$width-$padding,$autoheight-26,$linecolor);
 
        if($eng==1){
-           imagettftext($im, 10, 0, $width-200,$autoheight-20, $linecolor, $font,'¾­ÓÉ @Hi image ¿ìËÙÒıÇæÉú³É');
+           imagettftext($im, 10, 0, $width-200,$autoheight-20, $linecolor, $font,'ç»ç”± @Hi image å¿«é€Ÿå¼•æ“ç”Ÿæˆ');
        }else{
-           imagettftext($im, 10, 0, $width-160,$autoheight-20, $linecolor, $font,'¾­ÓÉ @Hi image Éú³É');
+           imagettftext($im, 10, 0, $width-160,$autoheight-20, $linecolor, $font,'ç»ç”± @Hi image ç”Ÿæˆ');
        }
         header("content-type: image/png");
         imagepng($im);
         imagedestroy($im);
     }
-    //¼ÆËã×Ö¾ÓÖĞÎ»ÖÃº¯Êı
+    //è®¡ç®—å­—å±…ä¸­ä½ç½®å‡½æ•°
     private function centerstr($width,$height,$fontsize,$str,$fontpath){
 
         $pos =imagettfbbox($fontsize,0,$fontpath,$str);
-        $w =$pos[4]-$pos[6];//ÎÄ×ÖµÄ¿í¶È
-        $h =$pos[5]-$pos[7];//ÎÄ×Ö¸ß¶È
-//        ÎÄ×ÖÍ¼ÏñµÄ¹æ¸ñ
+        $w =$pos[4]-$pos[6];//æ–‡å­—çš„å®½åº¦
+        $h =$pos[5]-$pos[7];//æ–‡å­—é«˜åº¦
+//        æ–‡å­—å›¾åƒçš„è§„æ ¼
         $ret =array(
             'left'=>0,
             'top' =>0,
@@ -257,7 +269,7 @@ class ImgTTF
                 mb_strlen($str,'utf-8');
             }
         }
-      //  if()//×óÉÏ½Ç×ø±ê
+      //  if()//å·¦ä¸Šè§’åæ ‡
 
     }
 }
