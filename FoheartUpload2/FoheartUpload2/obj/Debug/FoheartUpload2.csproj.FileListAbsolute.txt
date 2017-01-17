@@ -1,0 +1,15 @@
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\FoheartUpload2.exe.config
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\FoheartUpload2.exe
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\FoheartUpload2.pdb
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\Newtonsoft.Json.dll
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\Qiniu.dll
+E:\mystudy\FoheartUpload2\FoheartUpload2\bin\Debug\Newtonsoft.Json.xml
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.Finlist.resources
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.Form1.resources
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.Properties.Resources.resources
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.Setting.resources
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.csproj.GenerateResource.Cache
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.exe
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.pdb
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.csprojResolveAssemblyReference.cache
+E:\mystudy\FoheartUpload2\FoheartUpload2\obj\Debug\FoheartUpload2.about.resources
